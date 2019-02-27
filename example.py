@@ -4,6 +4,7 @@
 
 from Useful.XboxOneController import XboxOneController as Controller
 from Useful.useful import control
+from copy import deepcopy
 from time import sleep
 
 
@@ -13,7 +14,7 @@ if __name__ == '__main__':
 	middleValue = 0
 	middleValueHigh = 2
 	middleValueLow = -2
-	
+
 	try:
 		controller = Controller(
 			SLU = maxValue,
@@ -29,16 +30,16 @@ if __name__ == '__main__':
 		controller.start()
 
 		while True:
-			SL = list(controller["SL"])
-			SR = list(controller["SR"])
+			SL = deepcopy(controller["SL"])
+			SR = deepcopy(controller["SR"])
 
-			SL[0] = control(SL[0], middleValueLow, middleValueHigh, middleValue)
-			SL[1] = control(SL[1], middleValueLow, middleValueHigh, middleValue)
-			SR[0] = control(SR[0], middleValueLow, middleValueHigh, middleValue)
-			SR[1] = control(SR[1], middleValueLow, middleValueHigh, middleValue)
+			SL["H"] = control(SL["H"], middleValueLow, middleValueHigh, middleValue)
+			SL["V"] = control(SL["V"], middleValueLow, middleValueHigh, middleValue)
+			SR["H"] = control(SR["H"], middleValueLow, middleValueHigh, middleValue)
+			SR["V"] = control(SR["V"], middleValueLow, middleValueHigh, middleValue)
 
-			print(SL)
-			print(SR)
+			print("SL: ", SL)
+			print("SR: ", SR)
 			print()
 			sleep(0.01)
 	except KeyboardInterrupt:

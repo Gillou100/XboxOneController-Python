@@ -62,10 +62,10 @@ class XboxOneController(Thread):
 		"ABS_HAT0Y": ("U", "D")
 	}
 	_analogValues = {
-		"ABS_X": ("SL", 0),
-		"ABS_Y": ("SL", 1),
-		"ABS_RX": ("SR", 0),
-		"ABS_RY": ("SR", 1),
+		"ABS_X": ("SL", "H"),
+		"ABS_Y": ("SL", "V"),
+		"ABS_RX": ("SR", "H"),
+		"ABS_RY": ("SR", "V"),
 		"ABS_Z": ("L2", 2),
 		"ABS_RZ": ("R2", 2)
 	}
@@ -134,8 +134,14 @@ class XboxOneController(Thread):
 		self._virtualController["R2"] = self._newMaximas["R2"]["R"]
 		self._virtualController["R3"] = False
 
-		self._virtualController["SL"] = [(self._newMaximas["SL"]["L"] + self._newMaximas["SL"]["R"])/2, (self._newMaximas["SL"]["U"] + self._newMaximas["SL"]["D"])/2]
-		self._virtualController["SR"] = [(self._newMaximas["SR"]["L"] + self._newMaximas["SR"]["R"])/2, (self._newMaximas["SR"]["U"] + self._newMaximas["SR"]["D"])/2]
+		self._virtualController["SL"] = {
+			"H": (self._newMaximas["SL"]["L"] + self._newMaximas["SL"]["R"])/2,
+			"V": (self._newMaximas["SL"]["U"] + self._newMaximas["SL"]["D"])/2
+		}
+		self._virtualController["SR"] = {
+			"H": (self._newMaximas["SR"]["L"] + self._newMaximas["SR"]["R"])/2,
+			"V": (self._newMaximas["SR"]["U"] + self._newMaximas["SR"]["D"])/2
+		}
 
 		self._virtualController["Start"] = False
 		self._virtualController["Select"] = False
@@ -214,7 +220,7 @@ class XboxOneController(Thread):
 				for key, value in self._analogValues.items():
 					if(event.code == key):
 						if(value[1] != 2):
-							self._virtualController[value[0]][value[1]] = scaleChange(event.state, self._lastMaximas[value[0]][("L", "D")[value[1]]], self._lastMaximas[value[0]][("R", "U")[value[1]]], self._newMaximas[value[0]][("L", "D")[value[1]]], self._newMaximas[value[0]][("R", "U")[value[1]]])
+							self._virtualController[value[0]][value[1]] = scaleChange(event.state, self._lastMaximas[value[0]][{"H": "L", "V": "D"}[value[1]]], self._lastMaximas[value[0]][{"H": "R", "V": "U"}[value[1]]], self._newMaximas[value[0]][{"H": "L", "V": "D"}[value[1]]], self._newMaximas[value[0]][{"H": "R", "V": "U"}[value[1]]])
 						else:
 							self._virtualController[value[0]] = scaleChange(event.state, self._lastMaximas[value[0]]["R"], self._lastMaximas[value[0]]["P"], self._newMaximas[value[0]]["R"], self._newMaximas[value[0]]["P"])
 						break
