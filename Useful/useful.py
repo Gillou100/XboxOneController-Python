@@ -2,12 +2,12 @@
 # -*-coding:utf-8 -*
 
 
-def scaleChange(x0, xMin0, xMax0, xMin1, xMax1):
-	return xMin1 + (((x0 - xMin0) * (xMax1 - xMin1)) / (xMax0 - xMin0))
+def scaleChange(x, lastXmin, lastXmax, newXmin, newXmax):
+	return newXmin + (((x - lastXmin) * (newXmax - newXmin)) / (lastXmax - lastXmin))
 
 
-def control(value, minimaLow, minimaHigh, middle):
-	if value > min(minimaHigh, minimaLow) and value < max(minimaHigh, minimaLow):
+def control(value, minima0, minima1, middle):
+	if value > min(minima0, minima1) and value < max(minima0, minima1):
 		return middle
 	return value
 
